@@ -20,11 +20,47 @@
         </div>
     </header>
 
-    <section class="mb-10">
-        <label class="block text-xs font-bold mb-3 text-stone-400 tracking-widest uppercase">創作腦袋 / Ideas</label>
-        <textarea id="inputIdea" class="w-full p-5 glass-card focus:outline-none focus:ring-1 focus:ring-stone-200 min-h-[120px] text-sm leading-relaxed" placeholder="今天發生了什麼無聊或有趣的事？"></textarea>
-        <button onclick="convertIdeas()" class="mt-4 w-full py-4 bg-stone-800 text-white rounded-2xl text-xs tracking-[0.2em] font-medium shadow-sm active:scale-95 transition-transform">轉換內容視角</button>
+   <section class="mb-20">
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="text-[10px] font-bold text-stone-400 tracking-widest uppercase">排程管理 / Schedule</h3>
+            <div class="flex gap-2">
+                <button onclick="showSchedule('day')" class="text-[10px] text-stone-800 font-bold border-b border-stone-800">今日</button>
+                <button onclick="showSchedule('month')" class="text-[10px] text-stone-400 hover:text-stone-800">週/月</button>
+            </div>
+        </div>
+
+        <div id="dayView" class="glass-card overflow-hidden">
+            <div id="scheduleList" class="divide-y divide-stone-50">
+                <div class="flex items-center p-4">
+                    <input type="text" class="text-xs text-stone-400 w-12 font-mono bg-transparent outline-none" value="09:00">
+                    <input type="checkbox" class="mx-3 w-4 h-4 accent-stone-800">
+                    <input type="text" class="flex-1 bg-transparent text-sm outline-none" placeholder="輸入任務...">
+                </div>
+            </div>
+            <button onclick="addScheduleRow()" class="w-full py-4 text-[10px] text-stone-400 bg-stone-50/50 tracking-widest">+ 新增排程項目</button>
+        </div>
+
+        <div id="monthView" class="hidden glass-card p-2 min-h-[400px]">
+            <p class="text-[10px] text-center text-stone-400 my-2">下方將連結你的 Google 日曆</p>
+            <iframe src="https://calendar.google.com/calendar/embed?src=zh-tw.taiwan%23holiday%40group.v.calendar.google.com&ctz=Asia%2FTaipei&showTitle=0&showNav=1&showPrint=0&showTabs=0&showCalendars=0&showTz=0&bgcolor=%23F9F9F9&color=%23333333" 
+                style="border: 0" width="100%" height="400" frameborder="0" scrolling="no"></iframe>
+        </div>
     </section>
+
+    <script>
+        // 切換視圖功能
+        function showSchedule(type) {
+            if(type === 'day') {
+                document.getElementById('dayView').classList.remove('hidden');
+                document.getElementById('monthView').classList.add('hidden');
+            } else {
+                document.getElementById('dayView').classList.add('hidden');
+                document.getElementById('monthView').classList.remove('hidden');
+            }
+        }
+        
+        // (保留原本的 addScheduleRow 函式...)
+    </script>
 
     <div id="resultArea" class="space-y-4 hidden mb-12">
         <div class="p-6 glass-card">
