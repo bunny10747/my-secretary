@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>晶的自媒體秘書</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background-color: #F9F9F9; font-family: "Noto Sans TC", sans-serif; color: #333; }
+        .glass-card { background: white; border-radius: 16px; border: 1px solid #EEE; }
+    </style>
+</head>
+<body class="p-6">
+    <header class="mb-8">
+        <h1 class="text-xs tracking-widest text-gray-400 uppercase">Daily Assistant</h1>
+        <div class="flex justify-between items-end">
+            <h2 id="currentDate" class="text-2xl font-light text-gray-800">2025.12.26</h2>
+            <span id="dayCount" class="text-sm text-stone-500 font-medium pb-1">Day ---</span>
+        </div>
+    </header>
+
+    <section class="mb-8">
+        <label class="block text-sm mb-2 text-gray-500">今日生活碎片</label>
+        <textarea id="inputIdea" class="w-full p-4 glass-card focus:outline-none focus:ring-1 focus:ring-stone-300 min-h-[100px]" placeholder="今天發生了什麼？"></textarea>
+        <button onclick="convertIdeas()" class="mt-3 w-full py-3 bg-stone-800 text-white rounded-xl text-sm tracking-widest">轉換內容視角</button>
+    </section>
+
+    <div id="resultArea" class="space-y-4 hidden">
+        <div class="p-5 glass-card">
+            <h3 class="text-xs font-bold text-stone-400 mb-2 tracking-tighter uppercase">Instagram (365天挑戰)</h3>
+            <p id="igResult" class="text-sm leading-relaxed mb-3"></p>
+            <button onclick="copyText('igResult')" class="text-xs text-blue-500">複製文案</button>
+        </div>
+        <div class="p-5 glass-card">
+            <h3 class="text-xs font-bold text-stone-400 mb-2 tracking-tighter uppercase">Reels (影音思維)</h3>
+            <p id="reelsResult" class="text-sm leading-relaxed"></p>
+        </div>
+        <div class="p-5 glass-card">
+            <h3 class="text-xs font-bold text-stone-400 mb-2 tracking-tighter uppercase">Deep Content (YT/方格子)</h3>
+            <p id="deepResult" class="text-sm leading-relaxed"></p>
+        </div>
+    </div>
+
+    <script>
+        // 設定挑戰開始日期 (請改成你開始的那一天)
+        const startDate = new Date('2025-01-01');
+        const today = new Date();
+        const diffTime = Math.abs(today - startDate);
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        
+        document.getElementById('currentDate').innerText = today.toLocaleDateString('zh-TW').replace(/\//g, '.');
+        document.getElementById('dayCount').innerText = `Day ${diffDays}`;
+
+        function convertIdeas() {
+            const idea = document.getElementById('inputIdea').value;
+            if(!idea) return alert('請先輸入一點想法吧！');
+
+            document.getElementById('resultArea').classList.remove('hidden');
+            
+            // IG 固定模板邏輯
+            document.getElementById('igResult').innerText = `365 天，用一張照片記住今天！ 大家好，我是晶，今天是第 ${diffDays} 天。\n\n${idea}`;
+            
+            // Reels 轉化邏輯
+            document.getElementById('reelsResult').innerText = `🎬 建議拍攝：1句生活感OS + 3個日常空鏡剪輯。主題：${idea} 的瞬間。`;
+            
+            // 深度內容
+            document.getElementById('deepResult').innerText = `✍️ 方格子：將「${idea}」延伸為遠距創作者的內心觀察。\n📺 YT：以此發展 3 分鐘的人生哲學短片。`;
+        }
+
+        function copyText(id) {
+            const text = document.getElementById(id).innerText;
+            navigator.clipboard.writeText(text);
+            alert('已複製到剪貼簿');
+        }
+    </script>
+</body>
+</html>
