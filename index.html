@@ -2,77 +2,98 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>晶的自媒體秘書</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { background-color: #F9F9F9; font-family: "Noto Sans TC", sans-serif; color: #333; }
-        .glass-card { background: white; border-radius: 16px; border: 1px solid #EEE; }
+        body { background-color: #F9F9F9; font-family: "Noto Sans TC", sans-serif; color: #333; -webkit-font-smoothing: antialiased; }
+        .glass-card { background: white; border-radius: 16px; border: 1px solid #EEE; transition: all 0.3s ease; }
+        input[type="checkbox"]:checked + input { text-decoration: line-through; color: #999; }
     </style>
-</head><meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/4345/4345517.png">
-<body class="p-6">
+</head>
+<body class="p-6 max-w-md mx-auto">
     <header class="mb-8">
-        <h1 class="text-xs tracking-widest text-gray-400 uppercase">Daily Assistant</h1>
+        <h1 class="text-[10px] tracking-[0.2em] text-gray-400 uppercase font-bold">Daily Assistant</h1>
         <div class="flex justify-between items-end">
-            <h2 id="currentDate" class="text-2xl font-light text-gray-800">2025.12.26</h2>
+            <h2 id="currentDate" class="text-3xl font-light text-gray-800">2025.12.26</h2>
             <span id="dayCount" class="text-sm text-stone-500 font-medium pb-1">Day ---</span>
         </div>
     </header>
 
-    <section class="mb-8">
-        <label class="block text-sm mb-2 text-gray-500">今日生活碎片</label>
-        <textarea id="inputIdea" class="w-full p-4 glass-card focus:outline-none focus:ring-1 focus:ring-stone-300 min-h-[100px]" placeholder="今天發生了什麼？"></textarea>
-        <button onclick="convertIdeas()" class="mt-3 w-full py-3 bg-stone-800 text-white rounded-xl text-sm tracking-widest">轉換內容視角</button>
+    <section class="mb-10">
+        <label class="block text-xs font-bold mb-3 text-stone-400 tracking-widest uppercase">創作腦袋 / Ideas</label>
+        <textarea id="inputIdea" class="w-full p-5 glass-card focus:outline-none focus:ring-1 focus:ring-stone-200 min-h-[120px] text-sm leading-relaxed" placeholder="今天發生了什麼無聊或有趣的事？"></textarea>
+        <button onclick="convertIdeas()" class="mt-4 w-full py-4 bg-stone-800 text-white rounded-2xl text-xs tracking-[0.2em] font-medium shadow-sm active:scale-95 transition-transform">轉換內容視角</button>
     </section>
 
-    <div id="resultArea" class="space-y-4 hidden">
-        <div class="p-5 glass-card">
-            <h3 class="text-xs font-bold text-stone-400 mb-2 tracking-tighter uppercase">Instagram (365天挑戰)</h3>
-            <p id="igResult" class="text-sm leading-relaxed mb-3"></p>
-            <button onclick="copyText('igResult')" class="text-xs text-blue-500">複製文案</button>
+    <div id="resultArea" class="space-y-4 hidden mb-12">
+        <div class="p-6 glass-card">
+            <h3 class="text-[10px] font-bold text-stone-400 mb-3 tracking-widest uppercase">Instagram</h3>
+            <p id="igResult" class="text-sm leading-relaxed mb-4 text-stone-600"></p>
+            <button onclick="copyText('igResult')" class="text-[10px] px-3 py-1 border border-stone-200 rounded-full text-stone-500 active:bg-stone-50">複製文案</button>
         </div>
-        <div class="p-5 glass-card">
-            <h3 class="text-xs font-bold text-stone-400 mb-2 tracking-tighter uppercase">Reels (影音思維)</h3>
-            <p id="reelsResult" class="text-sm leading-relaxed"></p>
-        </div>
-        <div class="p-5 glass-card">
-            <h3 class="text-xs font-bold text-stone-400 mb-2 tracking-tighter uppercase">Deep Content (YT/方格子)</h3>
-            <p id="deepResult" class="text-sm leading-relaxed"></p>
+        <div class="p-6 glass-card">
+            <h3 class="text-[10px] font-bold text-stone-400 mb-2 tracking-widest uppercase">Reels & YouTube</h3>
+            <p id="reelsResult" class="text-sm leading-relaxed text-stone-600"></p>
         </div>
     </div>
 
+    <section class="mb-20">
+        <h3 class="text-[10px] font-bold text-stone-400 mb-4 tracking-widest uppercase">每日排程 / Schedule</h3>
+        <div class="glass-card overflow-hidden">
+            <div id="scheduleList" class="divide-y divide-stone-50">
+                <div class="flex items-center p-4">
+                    <input type="text" class="text-xs text-stone-400 w-12 font-mono bg-transparent outline-none" value="09:00">
+                    <input type="checkbox" class="mx-3 w-4 h-4 accent-stone-800">
+                    <input type="text" class="flex-1 bg-transparent text-sm outline-none" placeholder="點擊輸入任務...">
+                </div>
+                <div class="flex items-center p-4">
+                    <input type="text" class="text-xs text-stone-400 w-12 font-mono bg-transparent outline-none" value="14:00">
+                    <input type="checkbox" class="mx-3 w-4 h-4 accent-stone-800">
+                    <input type="text" class="flex-1 bg-transparent text-sm outline-none" placeholder="YouTube/IG 創作...">
+                </div>
+            </div>
+            <button onclick="addScheduleRow()" class="w-full py-4 text-[10px] text-stone-400 bg-stone-50/50 hover:bg-stone-50 transition-colors tracking-widest">+ 新增排程項目</button>
+        </div>
+    </section>
+
     <script>
-        // 設定挑戰開始日期 (請改成你開始的那一天)
+        // 1. 設定日期邏輯 (挑戰開始日期請改這裡)
         const startDate = new Date('2025-01-01');
         const today = new Date();
-        const diffTime = Math.abs(today - startDate);
-        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        const diffDays = Math.ceil(Math.abs(today - startDate) / (1000 * 60 * 60 * 24));
         
         document.getElementById('currentDate').innerText = today.toLocaleDateString('zh-TW').replace(/\//g, '.');
         document.getElementById('dayCount').innerText = `Day ${diffDays}`;
 
+        // 2. 轉換視角邏輯
         function convertIdeas() {
             const idea = document.getElementById('inputIdea').value;
-            if(!idea) return alert('請先輸入一點想法吧！');
-
+            if(!idea) return;
             document.getElementById('resultArea').classList.remove('hidden');
-            
-            // IG 固定模板邏輯
             document.getElementById('igResult').innerText = `365 天，用一張照片記住今天！ 大家好，我是晶，今天是第 ${diffDays} 天。\n\n${idea}`;
-            
-            // Reels 轉化邏輯
-            document.getElementById('reelsResult').innerText = `🎬 建議拍攝：1句生活感OS + 3個日常空鏡剪輯。主題：${idea} 的瞬間。`;
-            
-            // 深度內容
-            document.getElementById('deepResult').innerText = `✍️ 方格子：將「${idea}」延伸為遠距創作者的內心觀察。\n📺 YT：以此發展 3 分鐘的人生哲學短片。`;
+            document.getElementById('reelsResult').innerText = `🎥 Reels: 錄製一段「${idea}」的 15s 碎片。 \n📺 YouTube: 思考如何將「${idea}」串聯成週更主題。`;
+            window.scrollTo({ top: 200, behavior: 'smooth' });
         }
 
+        // 3. 複製功能
         function copyText(id) {
             const text = document.getElementById(id).innerText;
             navigator.clipboard.writeText(text);
-            alert('已複製到剪貼簿');
+            alert('文案已複製！');
+        }
+
+        // 4. 新增排程列
+        function addScheduleRow() {
+            const container = document.getElementById('scheduleList');
+            const newRow = document.createElement('div');
+            newRow.className = "flex items-center p-4";
+            newRow.innerHTML = `
+                <input type="text" class="text-xs text-stone-400 w-12 font-mono bg-transparent outline-none" placeholder="00:00">
+                <input type="checkbox" class="mx-3 w-4 h-4 accent-stone-800">
+                <input type="text" class="flex-1 bg-transparent text-sm outline-none" placeholder="新任務...">
+            `;
+            container.appendChild(newRow);
         }
     </script>
 </body>
